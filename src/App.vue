@@ -1,32 +1,42 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
     <router-view/>
   </div>
 </template>
-
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import request from '@/utils/request'
+import { setToken, getToken } from '@/utils/storage'
+export default {
+  components: { },
+  data () {
+    return {
+      list: getToken() || []
     }
+  },
+  methods: {
+    async  register () {
+      // 注册 账号/密码
+      // const { data } = await request.post('user/register', {
+      //   username: 'haian002',
+      //   password: '123456'
+      // })
+
+      // 登录 账号/密码
+      const res = await request.post('user/login', {
+        username: 'haian002',
+        password: '123456'
+      })
+      setToken(res.data.token)
+    }
+  },
+  created () {
   }
 }
+</script>
+<style lang="less">
+// .box{
+//   width: 200px;
+//   height: 200px;
+//   background-color: red;
+// }
 </style>
