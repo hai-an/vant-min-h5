@@ -1,19 +1,47 @@
 <template>
   <div class="collect-page">
-    收藏页面
+    <van-nav-bar fixed title="我的收藏" />
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+    >
+      <article-item v-for="(item, i) in list" :key="i" :item="item" />
+    </van-list>
   </div>
 </template>
-
 <script>
+import { getCollect } from '@/api/article'
 export default {
   name: 'collect-page',
   data () {
     return {
+      list: [],
+      page: 1,
+      loading: false,
+      finished: false
 
     }
   },
+  created () {
+  },
   methods: {
-
+    async onLoad () {
+    // 异步更新数据
+      const { data } = await getCollect({ page: this.page })
+      //  解构数组之后 ,添加对象到 list[]中
+      this.list.push(...data.rows)
+      this.loading = false // 加载完成
+      if (!data.rows.length || this.page > data.pageTotal) {
+      // 返回的数组长度 为0, 或者 总页码数<当前页码数
+      // 没有更多数据 可以加载 => finished 为 true
+        this.finished = true
+      } else {
+      // 当前页码数 自加1
+        this.page++
+      }
+    }
   }
 }
 </script>

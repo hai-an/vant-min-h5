@@ -10,3 +10,6 @@ export const register = params => {
 }
 // 用户登录模块
 export const login = params => request.post('user/login', params)
+
+// 获取当前用户信息
+export const currentUser = () => request.get('user/currentUser')
